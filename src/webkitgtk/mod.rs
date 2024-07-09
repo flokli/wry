@@ -110,7 +110,11 @@ impl InnerWebView {
   ) -> Result<Self> {
     let parent = match window.window_handle()?.as_raw() {
       RawWindowHandle::Xlib(w) => w.window,
-      _ => return Err(Error::UnsupportedWindowHandle),
+      h => {
+        eprintln!("got non-xlib window handle");
+        eprintln!("{h:?}");
+        return Err(Error::UnsupportedWindowHandle)
+      },
     };
 
     let xlib = Xlib::open()?;
